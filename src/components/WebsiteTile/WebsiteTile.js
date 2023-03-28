@@ -3,7 +3,7 @@ import { Link } from 'gatsby';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { ClickableTile, Tile } from 'carbon-components-react';
-import { ArrowRight24, Launch24 } from '@carbon/icons-react';
+import { ArrowRight24, Launch24, Download24 } from '@carbon/icons-react';
 import Fade from 'react-reveal/Fade';
 
 export default class WebsiteTile extends React.Component {
@@ -111,6 +111,7 @@ export default class WebsiteTile extends React.Component {
       'background--gray-80': feature_background === 'gray-80',
       'background--gray-100': feature_background === 'gray-100',
       'background--magenta-20': feature_background === 'magenta-20',
+      'background--green-10': feature_background === 'green-10',
       'background--inverse':
         feature_background === 'gray-100' ||
         feature_background === 'gray-80' ||
@@ -127,8 +128,21 @@ export default class WebsiteTile extends React.Component {
       .split(' ')
       .join('-');
 
-    const clickableTile = (
-      <Tile className={clickTileClassNames}>
+      const ChooseIcon = ( feature, feature_style, icon ) => {
+        if (icon === "Download") {
+          return (<Download24 aria-label="" />);
+        } else if ( (feature === 'true') & (feature_style === 'alt') || (icon === "arrowRight") ) {
+        return (<ArrowRight24 aria-label="" />);
+        } else {
+          return (<Launch24 aria-label="" />);
+        }
+      }
+
+      const clickableTile = (
+      <Tile
+        className={clickTileClassNames}
+        target={new_window === 'false' ? '_self' : '_blank'}
+      >
         <div className="bx--aspect-ratio bx--aspect-ratio--2x1">
           <div className="bx--aspect-ratio--object">
             <h2
@@ -141,11 +155,7 @@ export default class WebsiteTile extends React.Component {
             </h2>
             {caption ? <p className="tile__caption">{caption}</p> : null}
             <div className="tile__link-icon">
-              {(feature === 'true') & (feature_style === 'alt') || (icon === "arrowRight") ? (
-                <ArrowRight24 aria-label="" />
-              ) : (
-                <Launch24 aria-label="" />
-              )}
+              {ChooseIcon(feature, feature_style, icon)}
             </div>
           </div>
         </div>
@@ -157,7 +167,11 @@ export default class WebsiteTile extends React.Component {
         <Fade bottom distance="10%">
           {internalLink === true ? (
             <div>
-              <Link to={href} className={classNames}>
+              <Link
+                to={href}
+                className={classNames}
+                target={new_window === 'false' ? '_self' : '_blank'}
+              >
                 <div className={backgroundClassnames}>
                   <h2 className="bx--type-expressive-heading-05">
                     {feature_heading}
@@ -198,7 +212,10 @@ export default class WebsiteTile extends React.Component {
           <div className="ibm--grid tile-grid">
             <div className={classNames}>
               {internalLink === true ? (
-                <Link to={href}>
+                <Link
+                  to={href}
+                  target={new_window === 'false' ? '_self' : '_blank'}
+                >
                   <div className={backgroundClassnames}>
                     <div className="ibm--col-lg-4 ibm--offset-lg-1 ibm--col-md-3">
                       <h2
